@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Melo Personalizados</title>
+<style>
+*{box-sizing:border-box}
+:root{
+ --bg:#09051f;--panel:#17102f;--panel2:#211542;--pink:#ff2fa3;
+ --purple:#8b5cf6;--cyan:#22d3ee;--yellow:#ffd43b;--orange:#ff7a18;
+ --green:#32e875;--text:#fff7ff;--muted:#c9bddb;--line:#ffffff20;
+}
+html{scroll-behavior:smooth}
+body{
+ margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);
+ background:
+ radial-gradient(circle at 15% 10%,#ff2fa322 0,transparent 28%),
+ radial-gradient(circle at 85% 20%,#22d3ee20 0,transparent 28%),
+ radial-gradient(circle at 50% 90%,#8b5cf625 0,transparent 32%),
+ var(--bg);overflow-x:hidden;
+}
+body:before{
+ content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+ background-image:radial-gradient(#ffffff18 1px,transparent 1px);
+ background-size:24px 24px;
+}
+header{
+ background:linear-gradient(100deg,#16052f,#3b0b63,#071f46);
+ color:#fff;padding:18px 28px;display:flex;justify-content:space-between;
+ align-items:center;gap:15px;position:sticky;top:0;z-index:10;
+ border-bottom:1px solid #ffffff20;box-shadow:0 8px 35px #0008;
+}
+.logo{font-size:25px;font-weight:900;letter-spacing:.5px;text-shadow:0 0 20px #ff2fa366}
+.logo span{color:var(--yellow)}
+nav button,.btn{
+ border:0;border-radius:999px;padding:11px 17px;cursor:pointer;font-weight:800;
+ transition:.25s transform,.25s box-shadow,.25s filter;
+}
+nav button{background:linear-gradient(90deg,var(--pink),var(--purple));color:#fff;margin-left:6px;box-shadow:0 0 22px #ff2fa355}
+nav button:hover,.btn:hover{transform:translateY(-3px) scale(1.02);filter:brightness(1.1);box-shadow:0 10px 30px #0007}
+.container{max-width:1250px;margin:auto;padding:30px 20px}
+.hero{
+ background:linear-gradient(135deg,#ff2fa31c,#8b5cf625,#22d3ee15);
+ border:1px solid #ffffff20;border-radius:24px;padding:42px 34px;margin-bottom:30px;
+ box-shadow:0 20px 60px #0007;position:relative;overflow:hidden;
+}
+.hero:after{
+ content:"";position:absolute;width:220px;height:220px;border-radius:50%;
+ right:-80px;top:-90px;background:#ff2fa344;filter:blur(20px);
+}
+.hero h1{font-size:clamp(32px,6vw,62px);margin:0 0 12px;line-height:.98;
+ background:linear-gradient(90deg,#fff,var(--yellow),#ff65c4,var(--cyan));
+ -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--muted);font-size:17px;max-width:760px;line-height:1.6}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:30px 0 16px}
+.section-title h2{font-size:28px;margin:0}
+.cubicles,.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px}
+.cubicles .card{cursor:pointer;border:1px solid #ff2fa355;background:linear-gradient(145deg,#241044,#111b3d);box-shadow:0 14px 35px #0009,0 0 22px #ff2fa31c}
+.cubicles .card img{height:205px;object-fit:cover}
+.cubicles .card-body h3{font-size:23px;background:linear-gradient(90deg,#fff,var(--yellow),#ff65c4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cubicles .btn{width:100%;margin-top:10px;font-size:15px}
+.store-intro{padding:22px;margin:22px 0;border:1px solid #ff2fa355;border-radius:20px;background:linear-gradient(110deg,#ff2fa322,#8b5cf622,#22d3ee18);box-shadow:0 12px 35px #0006}
+.category-admin-products{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px}
+.category-admin-product{background:#0d0820;border:1px solid #ffffff1b;border-radius:12px;padding:10px}
+.category-admin-product img{width:100%;height:105px;object-fit:cover;border-radius:9px}
+
+.products-area{display:none}.products-area.show{display:block}
+.card{
+ background:linear-gradient(145deg,#17102f,#24143f);border-radius:20px;overflow:hidden;
+ border:1px solid #ffffff18;box-shadow:0 12px 35px #0008;position:relative;
+ transition:.3s transform,.3s box-shadow,.3s border-color;
+}
+.card{animation:cardIn .45s ease both}@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.card:hover{transform:translateY(-9px) rotateX(1deg);box-shadow:0 20px 55px #0009;border-color:#ff2fa388}
+.card img{width:100%;height:175px;object-fit:cover;background:#120a27}
+.card-body{padding:18px}.card h3{margin:0 0 8px;font-size:20px}.muted{color:var(--muted);font-size:14px;line-height:1.5}
+.price{font-weight:900;font-size:20px;color:var(--yellow);margin:12px 0}
+.modal{display:none;position:fixed;inset:0;background:#02000bcc;z-index:50;align-items:center;justify-content:center;padding:18px}
+.modal.show{display:flex}
+.modal-box{
+ background:linear-gradient(145deg,#140b2a,#241443);width:min(760px,100%);max-height:92vh;
+ overflow:auto;border-radius:22px;padding:24px;border:1px solid #ffffff25;
+ box-shadow:0 25px 90px #000b
+}
+.close{float:right;border:0;background:#ffffff18;color:#fff;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:18px}
+label{display:block;font-weight:800;margin:12px 0 6px;color:#ffe8ff}
+input,textarea,select{
+ width:100%;padding:12px;border:1px solid #ffffff25;border-radius:10px;
+ font:inherit;background:#0d0820;color:#fff;outline:none
+}
+input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #22d3ee20}
+textarea{min-height:100px;resize:vertical}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:650px){.form-grid{grid-template-columns:1fr}}
+.preview{max-width:180px;max-height:180px;display:block;margin-top:10px;border-radius:12px;border:2px solid #ffffff20}
+.btn-dark{background:linear-gradient(90deg,#8b5cf6,#ff2fa3);color:#fff}
+.btn-yellow{background:linear-gradient(90deg,#ffd43b,#ff7a18);color:#180b00}
+.btn-light{background:#ffffff14;color:#fff;border:1px solid #ffffff20}
+.admin{display:none}.admin.show{display:block}.customer.hide{display:none}
+.admin-nav{
+ display:flex;gap:8px;flex-wrap:wrap;background:#130b29;padding:14px;border-radius:15px;
+ margin-bottom:18px;position:sticky;top:78px;z-index:5;border:1px solid #ffffff18;
+ box-shadow:0 12px 35px #0007
+}
+.admin-nav button{border:0;padding:10px 14px;border-radius:9px;cursor:pointer;background:#ffffff10;color:#fff}
+.admin-nav button.active{background:linear-gradient(90deg,var(--pink),var(--purple));color:#fff}
+.admin-panel{display:none}.admin-panel.active{display:block}
+.admin-card{
+ background:linear-gradient(145deg,#17102f,#21143b);border-radius:17px;padding:19px;
+ margin-bottom:15px;box-shadow:0 10px 30px #0007;border:1px solid #ffffff16
+}
+.order{border:1px solid #ffffff20;border-radius:14px;padding:17px;margin:12px 0;background:#0e0822}
+.order-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.status{display:inline-block;padding:7px 10px;border-radius:20px;background:#3b2761;font-size:12px;font-weight:900}
+.chat{height:420px;border:1px solid #ffffff20;border-radius:14px;display:flex;flex-direction:column;overflow:hidden}
+.messages{flex:1;overflow:auto;padding:14px;background:#0b061a}
+.msg{max-width:80%;padding:11px 13px;border-radius:14px;margin:7px 0;line-height:1.4}
+.msg.client{background:linear-gradient(135deg,#ff2fa3,#8b5cf6);color:#fff;margin-left:auto}
+.msg.admin{background:#24163e;border:1px solid #ffffff18}
+.msg.bot{background:#49391a;border:1px solid #ffd43b55;color:#fff7d1}
+.chat-input{display:flex;gap:8px;padding:10px;background:#130b29;border-top:1px solid #ffffff15}
+.chat-input input{flex:1}
+.help{background:#3b2914;border-left:4px solid var(--yellow);padding:12px;margin:10px 0;border-radius:8px;color:#ffeec0}
+footer{text-align:center;padding:35px;color:#a99bbd}
+table{width:100%;border-collapse:collapse;background:#130b29}th,td{padding:10px;border-bottom:1px solid #ffffff15;text-align:left;font-size:14px}
+.actions{display:flex;gap:7px;flex-wrap:wrap}.empty{text-align:center;padding:35px;color:#9d90b0}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">Melo <span>Personalizados</span></div>
+<nav>
+<button onclick="showCustomer()">Ver productos</button>
+<button onclick="openOrderLookup()">Mi pedido / Chat</button>
+<button onclick="showAdminLogin()">Administrador</button>
+</nav>
+</header>
+
+<main id="customer" class="customer">
+<div class="container">
+<section class="hero">
+<h1>✨ Personaliza lo que imaginas</h1>
+<p>🎨 Elige una categoría y descubre toda la mercancía disponible y convierte tu idea en algo único. <b style="color:#ffd43b">¡Tu diseño, a tu manera!</b></p>
+</section>
+
+<section class="store-intro"><h2 style="margin:0 0 8px">🎁 ¡Encuentra eso que imaginas!</h2><p class="muted" style="margin:0">Explora nuestras categorías, descubre los diseños disponibles y selecciona el artículo que quieres personalizar.</p></section><div class="section-title"><h2>✨ Elige una categoría</h2><span class="muted">Toca para descubrir</span></div>
+<div id="cubicles" class="cubicles"></div>
+
+<section id="productsArea" class="products-area">
+<div class="section-title"><h2 id="productsHeading">Mercancía</h2></div>
+<div id="categoryInfo" class="store-intro" style="display:none"></div>
+<div id="products" class="products"></div>
+</section>
+
+<section class="hero" style="margin-top:28px">
+<h2>💬 Habla con Melo</h2>
+<p>Pregunta por precios, pedidos, entregas o habla directamente con la tienda.</p>
+<button class="btn btn-yellow" onclick="openChat('general')">Abrir chat</button>
+</section>
+</div>
+</main>
+
+<main id="admin" class="admin">
+<div class="container">
+<div class="hero">
+<h1>Panel de Administración</h1>
+<p>Administra pedidos, mercancías, categorías y conversaciones desde aquí.</p>
+</div>
+
+<div class="admin-nav">
+<button class="active" onclick="adminTab('pedidos',this)">📦 Pedidos</button>
+<button onclick="adminTab('mercancias',this)">🛍️ Mercancías</button>
+<button onclick="adminTab('cubiculos',this)">🗂️ Categorías</button>
+<button onclick="adminTab('chats',this)">💬 Chats</button>
+<button onclick="adminTab('config',this)">⚙️ Configuración</button>
+<button class="btn-light" onclick="logoutAdmin()">Salir</button>
+</div>
+
+<section id="tab-pedidos" class="admin-panel active"><div id="adminOrders"></div></section>
+
+<section id="tab-mercancias" class="admin-panel">
+<div class="admin-card">
+<h2>✨ Agregar mercancía a una categoría</h2><p class="muted">Entra en la categoría correspondiente y pulsa «Agregar mercancía aquí». El producto quedará guardado dentro de esa categoría.</p>
+<div class="form-grid">
+<div><label>Nombre</label><input id="pName"></div>
+<div><label>Precio</label><input id="pPrice" type="number" step="0.01"></div>
+<div><label>Categoría de la mercancía</label><select id="pCub"></select></div>
+<div><label>📸 Foto de la mercancía que verá el cliente</label><input id="pImage" type="file" accept="image/*" onchange="previewFile(this,'pPrev')"></div>
+</div>
+<img id="pPrev" class="preview">
+<label>Descripción</label><textarea id="pDesc" placeholder="Información del producto"></textarea>
+<button class="btn btn-yellow" onclick="addProduct()">Agregar mercancía</button>
+</div>
+<div id="adminProducts"></div>
+</section>
+
+<section id="tab-cubiculos" class="admin-panel">
+<div class="admin-card">
+<h2>Agregar categoría</h2>
+<label>Nombre</label><input id="cName" placeholder="Ej. Tazas">
+<label>Descripción de la categoría</label><textarea id="cDesc" placeholder="Describe qué tipo de mercancía encontrará el cliente"></textarea>
+<label>Foto representativa de la categoría</label><input id="cImage" type="file" accept="image/*" onchange="previewFile(this,'cPrev')">
+<img id="cPrev" class="preview">
+<button class="btn btn-yellow" onclick="addCubicle()">Agregar categoría</button>
+</div>
+<div id="adminCubicles"></div>
+</section>
+
+<section id="tab-chats" class="admin-panel">
+<div class="admin-card"><h2>Conversaciones</h2><div id="chatList"></div></div>
+<div id="adminChatArea"></div>
+</section>
+
+<section id="tab-config" class="admin-panel">
+<div class="admin-card">
+<h2>Datos de acceso</h2>
+<p><b>Usuario:</b> admin</p>
+<p><b>Contraseña:</b> melo1234</p>
+<div class="help">Puedes cambiar estos datos más adelante desde el código si quieres utilizar otras credenciales.</div>
+</div>
+</section>
+</div>
+</main>
+
+<!-- Detalle de categoría -->
+<div id="cubModal" class="modal"><div class="modal-box">
+<button class="close" onclick="closeModal('cubModal')">×</button>
+<div id="cubDetail"></div>
+</div></div>
+
+<!-- Pedido -->
+<div id="orderModal" class="modal"><div class="modal-box">
+<button class="close" onclick="closeModal('orderModal')">×</button>
+<h2>🛍️ Personaliza y completa tu pedido</h2><p class="muted">Completa tus datos y adjunta una foto de referencia para que podamos preparar tu diseño.</p>
+<p id="orderProductName"></p>
+<input type="hidden" id="orderProductId">
+<div class="form-grid">
+<div><label>Nombre</label><input id="oName" placeholder="Tu nombre"></div>
+<div><label>Teléfono</label><input id="oPhone" placeholder="809-000-0000"></div>
+<div><label>Correo electrónico</label><input id="oEmail" type="email" placeholder="Opcional"></div>
+<div><label>Cantidad</label><input id="oQty" type="number" min="1" value="1"></div>
+</div>
+<label>¿Cómo quieres tu producto?</label>
+<textarea id="oDetails" placeholder="Color, tamaño, nombre, texto, diseño, etc."></textarea>
+<label>📷 Foto de referencia de lo que deseas</label>
+<input id="oPhoto" type="file" accept="image/*" onchange="previewFile(this,'oPrev')">
+<img id="oPrev" class="preview">
+<button class="btn btn-yellow" onclick="createOrder()">Enviar pedido</button>
+</div></div>
+
+<!-- Login -->
+<div id="loginModal" class="modal"><div class="modal-box" style="max-width:420px">
+<button class="close" onclick="closeModal('loginModal')">×</button>
+<h2>Administrador</h2>
+<label>Usuario</label><input id="loginUser">
+<label>Contraseña</label><input id="loginPass" type="password">
+<button class="btn btn-yellow" style="margin-top:15px;width:100%" onclick="loginAdmin()">Entrar</button>
+<p id="loginError" style="color:#b00020"></p>
+</div></div>
+
+<!-- Consultar pedido y volver al chat personal -->
+<div id="lookupModal" class="modal"><div class="modal-box" style="max-width:480px">
+<button class="close" onclick="closeModal('lookupModal')">×</button>
+<h2>📦 Consulta tu pedido</h2>
+<p class="muted">Escribe el número de pedido y el teléfono que usaste al realizarlo para abrir tu conversación privada con Melo.</p>
+<label>Número de pedido</label><input id="lookupOrderId" placeholder="Ej. MP-1234567">
+<label>Teléfono</label><input id="lookupPhone" placeholder="809-000-0000">
+<button class="btn btn-yellow" style="margin-top:14px" onclick="lookupOrderChat()">Buscar mi pedido y abrir chat</button>
+<p id="lookupError" style="color:#ff8aab"></p>
+</div></div>
+<!-- Chat -->
+<div id="chatModal" class="modal"><div class="modal-box">
+<button class="close" onclick="closeModal('chatModal')">×</button>
+<h2>💬 Chat con Melo</h2>
+<div class="help">Las respuestas automáticas ayudan con preguntas comunes. Si necesitas hablar con la tienda, escribe tu mensaje y aparecerá en la conversación.</div>
+<div id="customerChat" class="chat">
+<div id="customerMessages" class="messages"></div>
+<div class="chat-input"><input id="customerChatInput" placeholder="Escribe tu mensaje..." onkeydown="if(event.key==='Enter')sendCustomerMessage()"><button class="btn btn-yellow" onclick="sendCustomerMessage()">Enviar</button></div>
+</div>
+</div></div>
+
+<footer>Melo Personalizados</footer>
+
+<script>
+const KEY='meloPersonalizadosV7';
+const ADMIN_USER='admin', ADMIN_PASS='melo1234';
+let selectedChat='general';
+
+function defaultData(){
+ return {
+ cubicles:[
+  {id:'c1',name:'Tazas',desc:'Tazas personalizadas para cumpleaños, parejas, empresas y ocasiones especiales.',image:''},
+  {id:'c2',name:'Camisetas',desc:'Camisetas personalizadas con nombres, fotos, frases y diseños.',image:''},
+  {id:'c3',name:'Regalos',desc:'Regalos personalizados para cumpleaños, aniversarios y celebraciones.',image:''},
+  {id:'c4',name:'Otros',desc:'Otros artículos personalizados disponibles en la tienda.',image:''}
+ ],
+ products:[
+  {id:'p1',name:'Taza personalizada',price:500,cub:'c1',desc:'Taza personalizada con tu diseño o foto.',image:''},
+  {id:'p2',name:'Camiseta personalizada',price:900,cub:'c2',desc:'Camiseta con diseño, nombre o imagen.',image:''},
+  {id:'p3',name:'Regalo personalizado',price:800,cub:'c3',desc:'Detalle personalizado para una ocasión especial.',image:''}
+ ],
+ orders:[], chats:{general:[]}
+ };
+}
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||defaultData()}catch(e){return defaultData()}}
+let data=load(); save();
+function save(){localStorage.setItem(KEY,JSON.stringify(data))}
+function id(prefix){return prefix+Date.now()+Math.random().toString(16).slice(2)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function showCustomer(){document.getElementById('customer').classList.remove('hide');document.getElementById('admin').classList.remove('show');renderCustomer()}
+function showAdminLogin(){document.getElementById('loginError').textContent='';if(sessionStorage.getItem('meloAdmin')==='1')showAdmin();else document.getElementById('loginModal').classList.add('show')}
+function loginAdmin(){if(document.getElementById('loginUser').value===ADMIN_USER&&document.getElementById('loginPass').value===ADMIN_PASS){sessionStorage.setItem('meloAdmin','1');closeModal('loginModal');showAdmin()}else document.getElementById('loginError').textContent='Usuario o contraseña incorrectos.'}
+function showAdmin(){document.getElementById('customer').classList.add('hide');document.getElementById('admin').classList.add('show');renderAdmin()}
+function logoutAdmin(){sessionStorage.removeItem('meloAdmin');showCustomer()}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function previewFile(input,target){const f=input.files[0];if(!f)return;const r=new FileReader();r.onload=e=>document.getElementById(target).src=e.target.result;r.readAsDataURL(f)}
+function fileToData(input){return new Promise(resolve=>{const f=input.files[0];if(!f)return resolve('');const r=new FileReader();r.onload=e=>resolve(e.target.result);r.readAsDataURL(f)})}
+
+function renderCustomer(){
+ const cs=document.getElementById('cubicles');
+ cs.innerHTML=data.cubicles.map(c=>`<div class="card"><img src="${c.image||'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22300%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%2317102f%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23ffffff%22 font-size=%2230%22%3ECategoría%3C/text%3E%3C/svg%3E'}" alt="${esc(c.name)}"><div class="card-body"><h3>${esc(c.name)}</h3><p class="muted">${esc(c.desc)}</p><button class="btn btn-dark" onclick="openCubicle('${c.id}')">Ver mercancía</button></div></div>`).join('');
+ document.getElementById('productsArea').classList.remove('show');
+ document.getElementById('products').innerHTML='';
+ document.getElementById('productsHeading').textContent='Mercancía';document.getElementById('categoryInfo').style.display='none';
+}
+function productCard(p){return `<div class="card"><img src="${p.image||'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22300%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23eee%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%23777%22 font-size=%2230%22%3EProducto%3C/text%3E%3C/svg%3E'}"><div class="card-body"><h3>${esc(p.name)}</h3><p class="muted">${esc(p.desc)}</p><div class="price">RD$ ${Number(p.price||0).toLocaleString()}</div><button class="btn btn-yellow" onclick="openOrder('${p.id}')">Personalizar y pedir</button></div></div>`}
+function openCubicle(cid){
+ const c=data.cubicles.find(x=>x.id===cid);
+ if(!c)return;
+ const ps=data.products.filter(p=>p.cub===cid);
+ document.getElementById('productsHeading').textContent='Mercancía: '+c.name;
+ document.getElementById('categoryInfo').style.display='block';
+ document.getElementById('categoryInfo').innerHTML='<h2>✨ '+esc(c.name)+'</h2><p>'+esc(c.desc||'Explora los artículos disponibles en esta categoría.')+'</p>'+(c.image?'<img class="preview" style="max-width:100%;max-height:220px" src="'+c.image+'">':'')+'<p><b>'+ps.length+' artículo(s) disponible(s)</b></p>';
+ document.getElementById('products').innerHTML=ps.length?ps.map(productCard).join(''):'<p class="empty">Todavía no hay mercancía en esta categoría.</p>';
+ document.getElementById('productsArea').classList.add('show');
+ document.getElementById('productsArea').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function openOrder(pid){const p=data.products.find(x=>x.id===pid);document.getElementById('orderProductId').value=pid;document.getElementById('orderProductName').textContent=`Producto: ${p.name} — RD$ ${Number(p.price||0).toLocaleString()}`;document.getElementById('orderModal').classList.add('show')}
+async function createOrder(){
+ const pid=document.getElementById('orderProductId').value,p=data.products.find(x=>x.id===pid);
+ const name=document.getElementById('oName').value.trim(),phone=document.getElementById('oPhone').value.trim(),qty=Math.max(1,Number(document.getElementById('oQty').value||1));
+ if(!name||!phone){alert('Coloca tu nombre y teléfono.');return}
+ const photo=await fileToData(document.getElementById('oPhoto'));
+ const oid='MP-'+Date.now().toString().slice(-7);
+ data.orders.push({id:oid,productId:pid,product:p.name,name,phone,email:document.getElementById('oEmail').value.trim(),qty,details:document.getElementById('oDetails').value.trim(),photo,status:'Pedido recibido',deliveryDate:'',deliveryTime:'',prepTime:'',chat:[]});
+ save();closeModal('orderModal');alert('Pedido enviado. Tu número de pedido es '+oid);openChat(oid);renderAdmin();renderCustomer();
+}
+
+function autoReply(text){
+ const t=text.toLowerCase();
+ if(t.includes('precio')||t.includes('cuanto')||t.includes('cuánto'))return 'Puedes revisar el precio directamente en cada mercancía. Si me dices cuál producto buscas, te orientamos.';
+ if(t.includes('entrega')||t.includes('cuando')||t.includes('cuándo'))return 'La fecha y hora de entrega se asignan al confirmar tu pedido. Puedes consultar el estado de tu pedido con su número.';
+ if(t.includes('foto')||t.includes('diseño'))return 'Sí. Cuando hagas el pedido puedes adjuntar una foto de referencia y escribir cómo quieres la personalización.';
+ if(t.includes('pedido'))return 'Puedes hacer tu pedido seleccionando el producto, completando tus datos y enviando los detalles de personalización.';
+ if(t.includes('hola')||t.includes('buenas'))return '¡Hola! Soy Melo. Puedo ayudarte con productos, precios, pedidos y entregas.';
+ return 'Recibí tu mensaje. Si necesitas una respuesta específica de la tienda, déjanos tu pregunta y un administrador podrá responderte.';
+}
+function chatArr(key){if(key==='general'){data.chats.general=data.chats.general||[];return data.chats.general}const o=data.orders.find(x=>x.id===key);if(!o)return [];o.chat=o.chat||[];return o.chat}
+
+function openOrderLookup(){document.getElementById('lookupError').textContent='';document.getElementById('lookupModal').classList.add('show')}
+function lookupOrderChat(){
+ const oid=document.getElementById('lookupOrderId').value.trim().toUpperCase();
+ const phone=document.getElementById('lookupPhone').value.trim().replace(/\\D/g,'');
+ const order=data.orders.find(o=>String(o.id).toUpperCase()===oid && String(o.phone).replace(/\\D/g,'')===phone);
+ if(!order){document.getElementById('lookupError').textContent='No encontramos un pedido con esos datos. Revisa el número y el teléfono.';return}
+ closeModal('lookupModal');openChat(order.id);
+}
+
+function openChat(key){selectedChat=key;renderCustomerChat();document.getElementById('chatModal').classList.add('show')}
+function renderCustomerChat(){const arr=chatArr(selectedChat);document.getElementById('customerMessages').innerHTML=(arr.length?arr.map(m=>`<div class="msg ${m.sender}"><b>${m.sender==='client'?'Tú':m.sender==='admin'?'Tienda':'Melo'}</b><br>${esc(m.text)}</div>`).join(''):'<div class="empty">Todavía no hay mensajes.</div>');const box=document.getElementById('customerMessages');box.scrollTop=box.scrollHeight}
+function sendCustomerMessage(){
+ const input=document.getElementById('customerChatInput'),text=input.value.trim();
+ if(!text)return;
+ const key=selectedChat,arr=chatArr(key);
+ arr.push({sender:'client',text,time:Date.now()});
+ if(key!=='general'){const o=data.orders.find(x=>x.id===key);if(o)o.chat=arr}else data.chats.general=arr;
+ save();input.value='';renderCustomerChat();renderChatList();
+}
+
+function adminTab(tab,btn){document.querySelectorAll('.admin-panel').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+tab).classList.add('active');document.querySelectorAll('.admin-nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');renderAdmin()}
+function renderAdmin(){renderOrders();renderProducts();renderCubicles();renderChatList();populateCubSelect()}
+function renderOrders(){const box=document.getElementById('adminOrders');if(!data.orders.length){box.innerHTML='<div class="admin-card empty">No hay pedidos todavía.</div>';return}box.innerHTML=data.orders.slice().reverse().map(o=>`<div class="order"><div class="order-top"><div><b>${esc(o.id)}</b><div>${esc(o.product)} × ${o.qty}</div><div class="muted">Cliente: ${esc(o.name)} · ${esc(o.phone)}</div></div><span class="status">${esc(o.status)}</span></div><p><b>Personalización:</b> ${esc(o.details||'No especificada')}</p>${o.photo?`<p><b>Foto del cliente:</b><br><img class="preview" src="${o.photo}"></p>`:''}<div class="form-grid"><div><label>Estado</label><select onchange="updateOrder('${o.id}','status',this.value)"><option ${o.status==='Pedido recibido'?'selected':''}>Pedido recibido</option><option ${o.status==='Pedido confirmado'?'selected':''}>Pedido confirmado</option><option ${o.status==='En preparación'?'selected':''}>En preparación</option><option ${o.status==='Listo para entregar'?'selected':''}>Listo para entregar</option><option ${o.status==='Entregado'?'selected':''}>Entregado</option></select></div><div><label>Tiempo de preparación</label><input value="${esc(o.prepTime||'')}" placeholder="Ej. 2 días" onchange="updateOrder('${o.id}','prepTime',this.value)"></div><div><label>📅 Fecha de entrega (calendario)</label><input type="date" value="${esc(o.deliveryDate||'')}" onchange="updateOrder('${o.id}','deliveryDate',this.value)"></div><div><label>Hora de entrega</label><input type="time" value="${esc(o.deliveryTime||'')}" onchange="updateOrder('${o.id}','deliveryTime',this.value)"></div></div><div class="actions" style="margin-top:12px"><button class="btn btn-dark" onclick="openChat('${o.id}')">💬 Hablar con cliente</button><button class="btn btn-light" onclick="deleteOrder('${o.id}')">Eliminar</button></div></div>`).join('')}
+function updateOrder(id,k,v){const o=data.orders.find(x=>x.id===id);if(o){o[k]=v;save();renderOrders()}}
+function deleteOrder(id){if(confirm('¿Eliminar este pedido?')){data.orders=data.orders.filter(o=>o.id!==id);save();renderAdmin()}}
+
+function populateCubSelect(){document.getElementById('pCub').innerHTML=data.cubicles.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}
+async function addProduct(){const n=document.getElementById('pName').value.trim();if(!n){alert('Coloca el nombre.');return}if(!document.getElementById('pCub').value){alert('Primero crea y selecciona una categoría.');return}data.products.push({id:id('p'),name:n,price:Number(document.getElementById('pPrice').value||0),cub:document.getElementById('pCub').value,desc:document.getElementById('pDesc').value.trim(),image:await fileToData(document.getElementById('pImage'))});save();document.getElementById('pName').value='';document.getElementById('pPrice').value='';document.getElementById('pDesc').value='';document.getElementById('pImage').value='';document.getElementById('pPrev').src='';renderAdmin();renderCustomer()}
+function renderProducts(){const box=document.getElementById('adminProducts');box.innerHTML=data.products.map(p=>`<div class="admin-card"><div class="form-grid"><div><h3>${esc(p.name)}</h3><p>${esc(p.desc)}</p><b>RD$ ${Number(p.price||0).toLocaleString()}</b></div><div>${p.image?`<img class="preview" src="${p.image}">`:''}</div></div><div class="actions"><button class="btn btn-light" onclick="deleteProduct('${p.id}')">Eliminar</button></div></div>`).join('')}
+function deleteProduct(pid){if(confirm('¿Eliminar esta mercancía?')){data.products=data.products.filter(p=>p.id!==pid);save();renderAdmin();renderCustomer()}}
+
+async function addCubicle(){const n=document.getElementById('cName').value.trim();if(!n){alert('Coloca el nombre de la categoría.');return}data.cubicles.push({id:id('c'),name:n,desc:document.getElementById('cDesc').value.trim(),image:await fileToData(document.getElementById('cImage'))});save();document.getElementById('cName').value='';document.getElementById('cDesc').value='';document.getElementById('cImage').value='';document.getElementById('cPrev').src='';renderAdmin();renderCustomer()}
+function renderCubicles(){
+ const box=document.getElementById('adminCubicles');
+ box.innerHTML=data.cubicles.map(c=>{
+  const items=data.products.filter(p=>p.cub===c.id);
+  return `<div class="admin-card">
+   <div class="form-grid">
+    <div><h3>🗂️ ${esc(c.name)}</h3><p>${esc(c.desc)}</p><b>${items.length} mercancía(s)</b></div>
+    <div>${c.image?`<img class="preview" src="${c.image}">`:'<p class="muted">Esta categoría todavía no tiene imagen.</p>'}</div>
+   </div>
+   <label>Imagen de esta categoría</label>
+   <input type="file" accept="image/*" onchange="updateCategoryImage('${c.id}',this)">
+   <div class="actions" style="margin-top:12px">
+    <button class="btn btn-yellow" onclick="chooseCategoryForProduct('${c.id}')">➕ Agregar mercancía aquí</button>
+    <button class="btn btn-light" onclick="deleteCubicle('${c.id}')">Eliminar categoría</button>
+   </div>
+   <div class="category-admin-products">
+    ${items.length?items.map(p=>`<div class="category-admin-product">${p.image?`<img src="${p.image}">`:''}<b>${esc(p.name)}</b><div class="price">RD$ ${Number(p.price||0).toLocaleString()}</div><button class="btn btn-light" onclick="deleteProduct('${p.id}')">Eliminar</button></div>`).join(''):'<p class="muted">Todavía no has agregado mercancía a esta categoría.</p>'}
+   </div>
+  </div>`;
+ }).join('')||'<div class="admin-card empty">Aún no hay categorías. Crea la primera para comenzar.</div>';
+}
+
+async function updateCategoryImage(cid,input){
+ const file=input.files&&input.files[0];if(!file)return;
+ if(!file.type.startsWith('image/')){alert('Selecciona un archivo de imagen.');input.value='';return;}
+ const c=data.cubicles.find(x=>x.id===cid);if(!c)return;
+ c.image=await fileToData(input);save();renderAdmin();renderCustomer();
+ alert('Imagen de la categoría actualizada.');
+}
+
+function chooseCategoryForProduct(cid){
+ populateCubSelect();
+ document.getElementById('pCub').value=cid;
+ adminTab('mercancias',document.querySelector('.admin-nav button[onclick*="mercancias"]'));
+ document.getElementById('pName').focus();
+ document.getElementById('tab-mercancias').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function deleteCubicle(cid){if(data.products.some(p=>p.cub===cid)){alert('No puedes eliminar esta categoría porque tiene mercancías asociadas.');return}if(confirm('¿Eliminar esta categoría?')){data.cubicles=data.cubicles.filter(c=>c.id!==cid);save();renderAdmin();renderCustomer()}}
+
+function renderChatList(){const box=document.getElementById('chatList');const list=[{id:'general',name:'Chat general'}].concat(data.orders.map(o=>({id:o.id,name:o.name+' — '+o.product})));box.innerHTML=list.map(x=>`<div class="admin-card"><b>${esc(x.name)}</b><button class="btn btn-dark" style="float:right" onclick="openAdminChat('${x.id}')">Abrir chat</button><div style="clear:both"></div></div>`).join('')}
+function openAdminChat(key){selectedChat=key;const arr=chatArr(key);document.getElementById('adminChatArea').innerHTML=`<div class="admin-card"><h2>💬 ${key==='general'?'Chat general':esc(key)}</h2><div class="chat"><div id="adminMessages" class="messages">${arr.length?arr.map(m=>`<div class="msg ${m.sender}"><b>${m.sender==='client'?'Cliente':m.sender==='admin'?'Tú':'Melo'}</b><br>${esc(m.text)}</div>`).join(''):'<div class="empty">No hay mensajes.</div>'}</div><div class="chat-input"><input id="adminChatInput" placeholder="Escribe tu respuesta..." onkeydown="if(event.key==='Enter')sendAdminMessage()"><button class="btn btn-yellow" onclick="sendAdminMessage()">Enviar</button></div></div></div>`;const b=document.getElementById('adminMessages');b.scrollTop=b.scrollHeight}
+function sendAdminMessage(){
+ const input=document.getElementById('adminChatInput'),text=input.value.trim();
+ if(!text)return;
+ const key=selectedChat,arr=chatArr(key);
+ arr.push({sender:'admin',text,time:Date.now()});
+ if(key!=='general'){const o=data.orders.find(x=>x.id===key);if(o)o.chat=arr}else data.chats.general=arr;
+ save();openAdminChat(key);renderChatList();
+}
+
+document.addEventListener('DOMContentLoaded',()=>{renderCustomer();if(sessionStorage.getItem('meloAdmin')==='1')showAdmin();});
+</script>
+</body>
+</html>
